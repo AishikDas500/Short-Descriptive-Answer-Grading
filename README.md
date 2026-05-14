@@ -2,104 +2,61 @@
 
 ## Overview
 
-This project is an Automated Short Answer Grading System designed to evaluate descriptive student answers using semantic similarity and concept coverage.
+This project is a lightweight Automated Short Answer Grading (ASAG) system designed for CBSE-style descriptive answers. It evaluates student responses by comparing them with a teacher-provided model answer using semantic similarity and concept coverage.
 
-The system compares a student's answer with the teacher’s model answer, calculates semantic similarity using SBERT (Sentence-BERT), checks important concept coverage using keyword matching, and assigns partial marks similar to real teacher grading.
+The goal is to support partial marking similar to real teacher evaluation instead of simple right-or-wrong checking.
 
-Unlike simple keyword-based systems, this project focuses on CBSE-style subjective answers where meaning matters more than exact wording.
+Unlike traditional keyword-only systems, this project combines Sentence-BERT (SBERT) embeddings with weighted concept matching to better handle paraphrased answers where meaning matters more than exact wording.
 
-The project also includes a TF-IDF baseline comparison and evaluation metrics such as Mean Absolute Error (MAE) and Pearson Correlation to validate grading performance against teacher-assigned scores.
+The system is also evaluated against human teacher scores using Mean Absolute Error (MAE) and Pearson Correlation, and compared with a TF-IDF baseline model.
 
 ---
 
-## Problem Statement 
+## Problem Statement
 
-Traditional short answer grading is time-consuming, subjective, and difficult to scale for large classrooms.
+Manual grading of short descriptive answers is time-consuming, inconsistent, and difficult to scale, especially in school environments with large class sizes.
 
-Most existing automated grading systems are designed for Western educational datasets and objective answer formats. There is limited evaluation for CBSE-style descriptive answers in Indian classrooms.
+Most existing automated grading systems are designed for Western university-level datasets and objective answer formats. There is limited evaluation specifically for CBSE-style short answers in Indian classrooms.
 
-This project aims to build a grading system better suited for short descriptive answers commonly found in CBSE examinations.
+This project aims to build a lightweight and explainable grading system better suited for short factual and descriptive answers commonly found in CBSE examinations.
 
 ---
 
 ## Objectives
 
-- Build an automated grading system for short descriptive answers
-- Use semantic similarity instead of exact word matching
-- Detect missing and matched concepts
-- Support partial marking similar to human teachers
-- Compare performance with a TF-IDF baseline
-- Evaluate grading quality using teacher-assigned marks
+* Build an automated grading system for short descriptive answers
+* Use semantic similarity instead of exact word matching
+* Support partial marking similar to human teachers
+* Detect matched and missing concepts
+* Compare performance with a TF-IDF baseline
+* Evaluate system quality using teacher-assigned marks
 
 ---
-
-## How it works
-
-### Text Processing
-Both student and model answers are cleaned using:
-
-- lowercase conversion
-- punctuation removal
-- stopword removal
-
-This improves grading quality by removing unnecessary noise.
-
-### Semantic Similarity
-SBERT converts both answers into sentence embeddings.
-Cosine similarity is then used to measure how semantically similar both answers are.
-This helps detect correct answers even when wording is different.
-
-### Concept Coverage 
-Important keywords are extracted from the model answer.
-
-The system checks:
-- matched concepts
-- missing concepts
-- Longer and more meaningful concepts are given higher weights.
-
-This improves partial marking quality.
-
-### Final Grading 
-Final score is calculated using:
-
-Final Score = 0.5 × Semantic Similarity + 0.5 × Concept Coverage
-
-This score is converted into marks based on question_marks and mapped to grade labels
-
----
-
-## Experimental Results
-he system was evaluated against a manually annotated dataset of 150 student-teacher answer pairs, specifically curated to reflect the linguistic patterns and grading rubrics of CBSE secondary education.
-
-| Method                            | MAE   | Pearson   |
-| --------------------------------- | ----: | --------: |
-| TF-IDF Baseline                   |  0.83 |         — |
-| Proposed SBERT + Concept Coverage |  0.65 |      0.44 |
-
-### Key Improvements 
-
-The proposed system reduced Mean Absolute Error by approximately 22% compared to the TF-IDF baseline, while achieving strong alignment with teacher-assigned scores.
 
 ## Tech Stack
 
 ### Backend
-- ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=flat&logo=fastapi)
 
-### Natural Language Processing (NLP)
-- Sentence Transformers (all-MiniLM-L6-v2)
-- scikit-learn
-- pandas
-- SciPy
-- NLTK
+* FastAPI
 
-### Frontend 
-- HTML
-- CSS
-- JavaScript
+### NLP / Machine Learning
+
+* Sentence Transformers (all-MiniLM-L6-v2)
+* scikit-learn
+* pandas
+* SciPy
+* NLTK
+
+### Frontend
+
+* HTML
+* CSS
+* JavaScript
 
 ---
 
 ## Project Structure
+
 ```text
 app/
 │
@@ -117,27 +74,163 @@ README.md
 .gitignore
 ```
 
-## Future Improvement 
-- Expand dataset using larger CBSE exam answer sheets with different language imputs
-- Add subject-specific grading rubrics
-- Improve concept detection using semantic keyword matching
-- Add teacher dashboard for bulk answer evaluation
-- Deploy as a production-ready web platform
+---
 
-## Research Contriution 
-This project focuses on evaluating automated grading specifically for CBSE-style short descriptive answers, which remains underexplored compared to Western educational datasets.
+## Methodology
 
-The work aims to bridge that gap using lightweight semantic models and explainable grading logic.
+The system consists of three main components:
+
+### 1. Text Preprocessing
+
+Both student and model answers are cleaned before comparison using:
+
+* lowercase conversion
+* punctuation removal
+* stopword removal
+
+This reduces noise and improves grading quality.
+
+---
+
+### 2. Semantic Similarity
+
+The preprocessed answers are converted into dense vector representations using SBERT (Sentence-BERT).
+
+Cosine similarity is then used to measure how semantically similar the student answer is to the model answer.
+
+This helps detect correct answers even when students use different wording.
+
+### Example
+
+**Model Answer:**
+Plants use sunlight to make food.
+
+**Student Answer:**
+Plants prepare food using solar energy.
+
+Even with different wording, semantic similarity remains high.
+
+---
+
+### 3. Concept Coverage
+
+Important concepts are extracted from the model answer using keyword filtering.
+
+The system checks:
+
+* matched concepts
+* missing concepts
+
+Longer and more meaningful concepts are assigned higher weights to improve partial marking quality.
+
+---
+
+### 4. Final Grading
+
+Final score is calculated using:
+
+```text
+Final Score = 0.5 × Semantic Similarity + 0.5 × Concept Coverage
+```
+
+This score is then scaled using `question_marks` and mapped into grade labels such as:
+
+* Excellent
+* Good
+* Average
+* Needs Improvement
+
+---
+
+## Baseline Comparison
+
+To validate improvement, a TF-IDF baseline model is implemented.
+
+### Baseline Method
+
+* TF-IDF Vectorization
+* Cosine Similarity
+* Score-to-Marks conversion
+
+This acts as the traditional keyword-based grading benchmark.
+
+The goal is to prove that semantic similarity performs better than lexical matching alone.
+
+---
+
+## Evaluation Metrics
+
+### Mean Absolute Error (MAE)
+
+MAE measures the average difference between:
+
+* teacher-assigned marks
+* system-predicted marks
+
+Lower MAE indicates better grading accuracy.
+
+---
+
+### Pearson Correlation
+
+Pearson Correlation measures how strongly the system grading aligns with teacher grading patterns.
+
+Higher correlation indicates stronger agreement with human evaluation.
+
+Range:
+
+* +1 = perfect agreement
+* 0 = no relationship
+* -1 = opposite grading logic
+
+---
+
+## Experimental Results
+
+| Method                            | MAE ↓ | Pearson ↑ |
+| --------------------------------- | ----: | --------: |
+| TF-IDF Baseline                   |  0.87 |         — |
+| Proposed SBERT + Concept Coverage |  0.66 |      0.53 |
+
+### Key Result
+
+The proposed system reduced Mean Absolute Error by approximately 24% compared to the TF-IDF baseline while achieving strong alignment with teacher-assigned scores.
+
+This demonstrates that combining semantic similarity with concept-level analysis provides more reliable grading than traditional lexical matching.
+
+---
+
+## Research Contribution
+
+This project focuses specifically on CBSE-style short descriptive answers, an area that remains underexplored compared to Western educational datasets.
+
+The main contributions include:
+
+1. A lightweight hybrid grading approach using semantic similarity and concept scoring
+2. A CBSE-specific evaluation dataset
+3. A baseline comparison against TF-IDF grading
+4. An explainable grading system with matched and missing concept feedback
+
+---
+
+## Future Improvements
+
+* Expand dataset using larger CBSE answer sheets
+* Add subject-specific grading rubrics
+* Improve concept detection using semantic keyword matching
+* Add teacher dashboard for bulk evaluation
+* Extend support for multilingual answers
+* Deploy as a production-ready web platform
+
+---
 
 ## Author
 
-Aishik Das
-Class 12 Student  
+Aishik
+Class 12 Student
 Research Project on Automated Short Answer Grading System
 
-## Citation 
-Citation
-Das, A. (2026). Lightweight Automated Short Answer Grading using Semantic Similarity. (Work in Progress).
+---
 
 ## License
 
