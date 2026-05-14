@@ -69,6 +69,7 @@ This score is converted into marks based on question_marks and mapped to grade l
 ---
 
 ## Experimental Results
+he system was evaluated against a manually annotated dataset of 150 student-teacher answer pairs, specifically curated to reflect the linguistic patterns and grading rubrics of CBSE secondary education.
 
 | Method                            | MAE   | Pearson   |
 | --------------------------------- | ----: | --------: |
@@ -82,7 +83,7 @@ The proposed system reduced Mean Absolute Error by approximately 22% compared to
 ## Tech Stack
 
 ### Backend
-- FastAPI
+- ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=flat&logo=fastapi)
 
 ### Natural Language Processing (NLP)
 - Sentence Transformers (all-MiniLM-L6-v2)
@@ -133,6 +134,10 @@ The work aims to bridge that gap using lightweight semantic models and explainab
 Aishik Das
 Class 12 Student  
 Research Project on Automated Short Answer Grading System
+
+## Citation 
+Citation
+Das, A. (2026). Lightweight Automated Short Answer Grading using Semantic Similarity. (Work in Progress).
 
 ## License
 
