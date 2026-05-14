@@ -41,7 +41,7 @@ def evaluate():
         print("===================================")
         print("Question Checked")
         print(f"Teacher Score   : {teacher_score}")
-        print(f"Predicted Score    : {predicted_score}")
+        print(f"Predicted Score : {predicted_score}")
         print(f"Difference      : {round(error, 2)}")
         print(f"Grade Label     : {final_result['grade']}")
         print("===================================\n")
