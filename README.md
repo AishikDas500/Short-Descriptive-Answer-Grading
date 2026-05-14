@@ -128,10 +128,11 @@ This project focuses on evaluating automated grading specifically for CBSE-style
 
 The work aims to bridge that gap using lightweight semantic models and explainable grading logic.
 
-## Author 
+## Author
+
 Aishik Das
-Class 12th Student 
-Research Project on Educational Technology
+Class 12 Student  
+Research Project on Automated Short Answer Grading System
 
 ## License
 
