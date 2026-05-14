@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Answer Grader</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-soft: #F8F4F1;         
+            --glass: rgba(255, 255, 255, 0.7);
+            --accent-latte: #C4A484;
+            --text-main: #2C1B0E;       
+            --text-secondary: #5E4B3C;
+            --success: #556B2F;         
+            --alert: #A0522D;           
+            --shadow: 0 20px 40px rgba(0,0,0,0.05);
+        }
+
+        body {
+            background-color: var(--bg-soft);
+            background-image: radial-gradient(#e5d9cf 1px, transparent 1px);
+            background-size: 30px 30px; 
+            font-family: 'Playfair Display', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: var(--text-main);
+        }
+
+        .main-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid white;
+            padding: 3rem;
+            border-radius: 32px;
+            box-shadow: var(--shadow);
+            width: 90%;
+            max-width: 850px;
+        }
+
+        header { text-align: center; margin-bottom: 2rem; }
+        h1 { font-weight: 900; font-size: 2.8rem; margin: 0; }
+        .subtitle { font-style: italic; color: var(--text-secondary); opacity: 0.8; }
+
+        .input-group { margin-bottom: 1.5rem; }
+        
+        label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-latte);
+        }
+
+        textarea, input {
+            width: 100%;
+            padding: 18px;
+            border: 1.5px solid rgba(0,0,0,0.05);
+            border-radius: 15px;
+            background: white;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            box-sizing: border-box;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"] {
+            width: 180px;
+            text-align: center;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: bold;
+            font-size: 1.4rem;
+            border: 2px dashed var(--accent-latte);
+            background: var(--white-coffee);
+            margin: 0 auto;
+            display: block;
+        }
+
+        textarea:focus, input:focus {
+            border-color: var(--accent-latte);
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(196, 164, 132, 0.1);
+        }
+
+        #model_answer { min-height: 80px; border-left: 5px solid var(--accent-latte); }
+        #student_answer { min-height: 200px; }
+
+        .action-area { text-align: center; margin-top: 2rem; }
+
+        button {
+            background: var(--text-main);
+            color: #F8F4F1;
+            border: none;
+            padding: 18px 50px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 25px rgba(44, 27, 14, 0.2);
+        }
+
+        button:hover {
+            transform: scale(1.05) translateY(-3px);
+            background: var(--text-secondary);
+        }
+
+        #result {
+            margin-top: 2.5rem;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .score-display {
+            margin-bottom: 2rem;
+        }
+
+        .score-circle {
+            display: inline-block;
+            background: var(--text-main);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.6rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .number-font {
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: bold; 
+            font-style: normal; 
+        }
+
+        .feedback-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            text-align: left;
+        }
+
+        .feedback-item {
+            padding: 20px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            background: var(--bg-soft);
+            border: 1px solid rgba(0,0,0,0.05);
+            color: var(--text-secondary);
+            display: inline-block;
+        }
+
+        .matched-title { color: var(--success); font-weight: bold; }
+        .missing-title { color: var(--alert); font-weight: bold; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div class="main-card">
+        <header>
+            <h1>Answer Grader</h1>
+            <div class="subtitle">Answer Evaluation Interface</div>
+        </header>
+
+        <div class="input-group">
+            <label>Model Answer</label>
+            <textarea id="model_answer" placeholder="The standard for comparison..."></textarea>
+        </div>
+        
+        <div class="input-group">
+            <label>Student Submission</label>
+            <textarea id="student_answer" placeholder="The response to be evaluated..."></textarea>
+        </div>
+
+        <div class="input-group" style="text-align: center;">
+            <label>Question Marks</label>
+            <input type="number" id="student_marks" placeholder="0" min="1">
+        </div>
+        
+        <div class="action-area">
+            <button onclick="gradeAnswer()">Grade Response</button>
+        </div>
+
+        <div id="result">
+            <div class="score-display">
+                <div class="score-circle">
+                    Score: <span id="score_val" class="number-font"></span> | <span id="grade_val"></span>
+                </div>
+            </div>
+            
+            <div class="feedback-grid">
+                <div class="feedback-item">
+                    <span class="matched-title">✓ Captured Concepts</span>
+                    <div id="matched_tags" class="tag-container"></div>
+                </div>
+                <div class="feedback-item">
+                    <span class="missing-title">✗ Missing Elements</span>
+                    <div id="missing_tags" class="tag-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function gradeAnswer() {
+            const model = document.getElementById("model_answer").value;
+            const student = document.getElementById("student_answer").value;
+            const marks = document.getElementById("student_marks").value;
+            const resultDiv = document.getElementById("result");
+
+            try {
+                const response = await fetch('/grade', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        model_answer: model, 
+                        student_answer: student, 
+                        question_marks: parseInt(marks) 
+                    })
+                });
+
+                const result = await response.json();
+                
+                // Set Values
+                document.getElementById("score_val").innerText = result.score;
+                document.getElementById("grade_val").innerText = result.grade;
+                
+                // Create Tags
+                const matchedContainer = document.getElementById("matched_tags");
+                const missingContainer = document.getElementById("missing_tags");
+                
+                matchedContainer.innerHTML = result.keywords.matched.map(k => `<span class="tag">${k}</span>`).join('') || '<span class="tag">None</span>';
+                missingContainer.innerHTML = result.keywords.missing.map(k => `<span class="tag">${k}</span>`).join('') || '<span class="tag">None</span>';
+
+                resultDiv.style.display = "block";
+                resultDiv.scrollIntoView({ behavior: 'smooth' });
+
+            } catch (error) {
+                alert("Ensure your grading server is active.");
+            }
+        }
+    </script>
+</body>
+</html>

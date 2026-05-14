@@ -1,0 +1,9 @@
+question_id,question,topic,model_answer,student_answer,teacher_score,question_marks
+1,Explain photosynthesis.,Biology,"Photosynthesis is the process by which green plants use sunlight, carbon dioxide and water to make glucose and release oxygen.",Plants use sunlight and water to make food and release oxygen.,4.5,5
+2,What is democracy?,Civics,"Democracy is a system of government in which power rests with the people, who elect representatives and make decisions through voting.",Democracy means rule by the people through elections.,3.5,5
+3,State Newton's first law of motion.,Physics,Newton's first law states that an object remains at rest or in uniform motion unless acted upon by an external force.,An object stays at rest unless a force acts on it.,4,5
+4,Why is the Constitution important?,Civics,"The Constitution is important because it provides the basic rules of a country, protects rights, and defines the powers of government.",It gives rules for the country and protects people's rights.,3.5,5
+5,Explain the water cycle.,Geography,"The water cycle includes evaporation, condensation and precipitation, moving water between the earth, atmosphere and water bodies.","Water evaporates, forms clouds and comes back as rain.",4,5
+6,What are acids?,Chemistry,Acids are substances that release hydrogen ions in water and often taste sour.,Acids are sour substances that give hydrogen ions in water.,4.5,5
+7,Why do we use renewable energy?,Science,"Renewable energy is used because it is sustainable, reduces pollution and does not get exhausted quickly.",It reduces pollution and does not finish quickly.,3.5,5
+8,What is the role of Parliament?,Civics,"Parliament makes laws, discusses national issues and holds the government accountable.",Parliament makes laws and checks the government.,4,5
