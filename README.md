@@ -46,20 +46,16 @@ This improves grading quality by removing unnecessary noise.
 
 ### Semantic Similarity
 SBERT converts both answers into sentence embeddings.
-
 Cosine similarity is then used to measure how semantically similar both answers are.
-
 This helps detect correct answers even when wording is different.
 
 ### Concept Coverage 
 Important keywords are extracted from the model answer.
 
 The system checks:
-
-matched concepts
-missing concepts
-
-Longer and more meaningful concepts are given higher weights.
+- matched concepts
+- missing concepts
+- Longer and more meaningful concepts are given higher weights.
 
 This improves partial marking quality.
 
