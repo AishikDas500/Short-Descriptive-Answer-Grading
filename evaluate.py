@@ -7,7 +7,7 @@ from app.grader import get_keywords, grade
 
 def evaluate():
     file_path = input("Enter file path: ").strip().strip('"')
-    df = pd.read_csv(file_path)
+    df = pd.read_csv(file_path, encoding='latin-1')
 
     total_error = 0
     total_samples = len(df)
