@@ -64,10 +64,10 @@ Evaluated on **150 annotated CBSE answer pairs** across four subjects: Chemistry
 
 | Method | MAE | Pearson |
 |--------|-----|---------|
-| TF-IDF Baseline | 0.87 | — |
-| **Proposed System (SBERT + Concept Coverage)** | **0.66** | **0.53** |
+| TF-IDF Baseline | 0.88 | — |
+| **Proposed System (SBERT + Concept Coverage)** | **0.57** | **0.76** |
 
-The proposed system reduces MAE by **24%** compared to the TF-IDF baseline, with a Pearson correlation of 0.53 against human teacher scores.
+The proposed system reduces MAE by **35%** compared to the TF-IDF baseline, with a Pearson correlation of 0.76 against human teacher scores.
 
 ---
 
@@ -148,7 +148,7 @@ python baseline.py
 
 ## Limitations
 
-- Dataset limited to 150 samples across four subjects
+- Dataset limited to 521 samples across six subjects
 - Keyword matching penalises correct paraphrasing
 - English language only — no Hindi or regional language support
 - Grading thresholds set empirically
